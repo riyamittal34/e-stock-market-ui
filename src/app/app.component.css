@@ -1,0 +1,14 @@
+.logo {
+    width: 100px;
+    height: 30px;
+    background-color: red;
+    margin-right: 20px;
+}
+
+button {
+    margin: 0 10px;
+}
+
+div {
+    float: left;
+}
