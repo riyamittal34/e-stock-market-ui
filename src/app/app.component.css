@@ -12,3 +12,7 @@ button {
 div {
     float: left;
 }
+
+.container {
+    margin: 10px;
+}
