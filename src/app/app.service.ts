@@ -1,13 +1,17 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
-  companyBaseUrl: string = "http://localhost:8081/api/v1.0/market/company/";
-  stockBaseUrl: string = "http://localhost:8081/api/v1.0/market/stock/";
+  companyBaseUrl: string = environment.companyBaseUrl;
+  stockBaseUrl: string = environment.stockBaseUrl;
+
+  username: string = environment.username;
+  password: string = environment.password;
 
   constructor(private http: HttpClient) { }
 
@@ -17,8 +21,8 @@ export class AppService {
         .set('Content-Type', 'application/x-www-form-urlencoded')
     }
     const body = new HttpParams()
-      .set('username', 'riya')
-      .set('password', 'riya@123');
+      .set('username', this.username)
+      .set('password', this.password);
     return this.http.post(this.companyBaseUrl + "login", body.toString(), httpOptions);
   }
 
@@ -28,8 +32,8 @@ export class AppService {
         .set('Content-Type', 'application/x-www-form-urlencoded')
     }
     const body = new HttpParams()
-      .set('username', 'riya')
-      .set('password', 'riya@123');
+      .set('username', this.username)
+      .set('password', this.password);
     return this.http.post(this.stockBaseUrl + "login", body.toString(), httpOptions);
   }
 

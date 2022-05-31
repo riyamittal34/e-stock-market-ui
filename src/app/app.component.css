@@ -16,3 +16,14 @@ div {
 .container {
     margin: 10px;
 }
+
+.companyTable {
+    width: 95%;
+    padding: 30px;
+    margin: 20px 10px;
+}
+
+button {
+    background-color: #3949ab;
+    color: white;
+}

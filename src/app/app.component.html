@@ -2,10 +2,10 @@
   <div class="row">
     <div style="float: left;" class="logo">Logo</div>
     <div style="float: left;">
-      <button mat-raised-button color="primary">Add Company</button>
-      <button mat-raised-button color="primary">List All Company</button>
+      <button mat-raised-button>Add Company</button>
+      <button mat-raised-button (click)="getAllCompany()">List All Company</button>
     </div>
-    <div style="float: right; position: fixed; right: 20px;">
+    <div style="float: right; position: absolute; right: 20px;">
       <mat-form-field class="example-form-field" appearance="fill">
         <mat-label>Company Code</mat-label>
         <input matInput type="text" [(ngModel)]="companyCodeFilter">
@@ -16,4 +16,50 @@
       </mat-form-field>
     </div>
   </div>
+</div>
+
+<br /><br /><br />
+
+<div class="mat-elevation-z8 companyTable" *ngIf="allCompanyFlag == true">
+  <mat-table [dataSource]="dataSource">
+    <div *ngFor="let column of displayColumns;">
+      <ng-container [matColumnDef]="column">
+        <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
+        <div *ngIf="column == 'No.'">
+          <mat-cell *matCellDef="let element; let i = index"> {{i + 1}} </mat-cell>
+        </div>
+        <div *ngIf="column == 'Name'">
+          <mat-cell *matCellDef="let element"> {{element.companyName}} </mat-cell>
+        </div>
+        <div *ngIf="column == 'Code'">
+          <mat-cell *matCellDef="let element"> {{element.companyCode}} </mat-cell>
+        </div>
+        <div *ngIf="column == 'Latest Stock Price'">
+          <mat-cell *matCellDef="let element"> {{element.latestStockPrice}} </mat-cell>
+        </div>
+        <div *ngIf="column == 'Stock Exchange'">
+          <mat-cell *matCellDef="let element"> {{element.stockExchange}} </mat-cell>
+        </div>
+        <div *ngIf="column == 'Website'">
+          <mat-cell *matCellDef="let element"> {{element.companyWebsite}} </mat-cell>
+        </div>
+      </ng-container>
+    </div>
+    <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+  </mat-table>
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>
+
+<div *ngIf="companySearchFlag == true">
+  <table>
+    <tr>
+      <td>Company Code</td>
+      <td> {{companyData.companyCode}} </td>
+    </tr>
+    <tr>
+      <td>Company Name</td>
+      <td> {{companyData.companyName}} </td>
+    </tr>
+  </table>
 </div>
