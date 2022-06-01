@@ -37,19 +37,22 @@ button {
 mat-list {
     width: 70%;
     padding: 10px;
-    margin: 20px 50%;
     border: 1px solid lightgrey;
     border-radius: 2px;
 }
 
+.list-align-center {
+    margin: 20px 50%;
+}
+
 .list-div-col1 {
     float: left; 
-    width: 30%; 
-    text-align: center;
+    width: 50%; 
+    text-align: left;
 }
 
 .list-div-col2 {
     float: left; 
-    width: 70%; 
-    text-align: center;
+    width: 50%; 
+    text-align: left;
 }

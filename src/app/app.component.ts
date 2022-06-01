@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from './app.service';
-import { Company } from './company.model';
+import { Company } from './models/company.model';
+import { Stock } from './models/stock.model';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +17,12 @@ export class AppComponent implements OnInit {
   stockToken: string = "";
 
   dataSource: MatTableDataSource<Company> = new MatTableDataSource();
+  stockDataSource: MatTableDataSource<Stock> = new MatTableDataSource();
 
   companyCodeFilter: string = "";
   companies: Company[] = [];
-  displayColumns = ['No.', 'Name', 'Code', 'Stock Exchange', 'Latest Stock Price', 'Website'];
+  companyColumns = ['No.', 'Name', 'Code', 'Stock Exchange', 'Latest Stock Price', 'Website'];
+  stockColumns = ['No.', 'Stock Price', 'Date', 'Timestamp'];
   allCompanyFlag: boolean = true;
   companySearchFlag: boolean = false;
   companyData: Company;
@@ -28,8 +30,16 @@ export class AppComponent implements OnInit {
   toDateValue: any;
   minDate: any;
   maxDate: any;
+  stocks: Stock[] = [];
+  stockFlag: boolean = false;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  stockPageSize: number = 5;
+  stockPageIndex: number = 0;
+  companyPageSize: number = 5;
+  companyPageIndex: number = 0;
+
+  @ViewChild('paginator1') paginator1: MatPaginator;
+  @ViewChild('paginator2') paginator2: MatPaginator;
 
   constructor(private appService: AppService, private toastr: ToastrService,
     private datePipe: DatePipe) {
@@ -37,8 +47,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.appService.getCompanyAccessToken().subscribe((data: any) => {
       this.companyToken = data["access_token"];
-      // this.getAllCompany();
-      this.getCompanyByCompanyCode('abc');
+      this.getAllCompany();
     })
     this.appService.getStockAccessToken().subscribe((data: any) => {
       this.stockToken = data['access_token'];
@@ -50,10 +59,11 @@ export class AppComponent implements OnInit {
       console.log(data);
       if (data['message'] != null && data['message']['code'] == 'COMPANY_FOUND') {
         this.toastr.success(data['message']['description'], data['message']['code']);
-        this.companies = [];
         this.companyData = data['data'];
+        this.companies = [];
         this.allCompanyFlag = false;
         this.companySearchFlag = true;
+        this.resetDates();
       } else {
         this.toastr.error(data['message']['description'], data['message']['code']);
       }
@@ -69,24 +79,44 @@ export class AppComponent implements OnInit {
         this.companies = data['data'];
         this.dataSource = new MatTableDataSource(this.companies);
         setTimeout(() => {
-          this.dataSource.paginator = this.paginator;
+          this.dataSource.paginator = this.paginator1;
         }, 50);
         this.companySearchFlag = false;
         this.allCompanyFlag = true;
+        this.resetDates();
       } else {
         this.toastr.error(data['message']['description'], data['message']['code']);
       }
+    }, fail => {
+      let error = fail.error;
+      this.toastr.error(error['message']['description'], error['message']['code']);
     })
   }
 
   filterStocks() {
-    console.log("fromDate: ", this.fromDateValue)
-    let fromDate = this.datePipe.transform(this.fromDateValue, 'dd-MM-yyyy')
-    console.log(fromDate)
+    let fromDate = this.datePipe.transform(this.fromDateValue, 'dd-MM-yyyy') + "";
+    let toDate = this.datePipe.transform(this.toDateValue, 'dd-MM-yyyy') + "";
 
-    console.log("toDate: ", this.toDateValue)
-    let toDate = this.datePipe.transform(this.toDateValue, 'dd-MM-yyyy')
-    console.log(toDate)
+    this.appService.filterStock(this.stockToken, this.companyCodeFilter, fromDate, toDate)
+      .subscribe((data: any) => {
+        console.log(data);
+        if (data['message'] != null && data['message']['code'] == 'FILTER_STOCK_SUCCESS') {
+          this.toastr.success(data['message']['description'], data['message']['code']);
+          this.companyData = data['data'];
+          this.stocks = this.companyData.stocks;
+          this.allCompanyFlag = false;
+          this.stockFlag = true;
+          this.stockDataSource = new MatTableDataSource(this.stocks);
+          setTimeout(() => {
+            this.stockDataSource.paginator = this.paginator2;
+          }, 50);
+        } else {
+          this.toastr.error(data['message']['description'], data['message']['code']);
+        }
+      }, fail => {
+        let error = fail.error;
+        this.toastr.error(error['message']['description'], error['message']['code']);
+      })
   }
 
   setMaxDate() {
@@ -102,5 +132,19 @@ export class AppComponent implements OnInit {
     this.maxDate = null;
     this.fromDateValue = null;
     this.toDateValue = null;
+    this.stockFlag = false;
+    this.stocks = [];
+  }
+
+  stockPageChangeEvent($event: PageEvent) {
+    console.log("event: ", $event);
+    this.stockPageIndex = $event.pageIndex;
+    this.stockPageSize = $event.pageSize;
+  }
+
+  companyPageChangeEvent($event: PageEvent) {
+    console.log("event: ", $event);
+    this.companyPageIndex = $event.pageIndex;
+    this.companyPageSize = $event.pageSize;
   }
 }

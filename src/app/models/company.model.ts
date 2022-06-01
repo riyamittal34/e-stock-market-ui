@@ -1,3 +1,5 @@
+import { Stock } from "./stock.model";
+
 export class Company {
     public companyId: string;
     public companyCode: string;
@@ -7,4 +9,8 @@ export class Company {
     public companyWebsite: string;
     public stockExchange: string;
     public latestStockPrice: number;
+    public stocks: Stock[];
+    public avgStockPrice: number;
+    public minStockPrice: number;
+    public maxStockPrice: number;
 }

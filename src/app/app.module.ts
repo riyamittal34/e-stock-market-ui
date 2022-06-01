@@ -39,7 +39,11 @@ import { DatePipe } from '@angular/common';
     FormsModule,
     HttpClientModule,
     NgbModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right',
+      timeOut: 2000,
+      preventDuplicates: true
+    })
   ],
   providers: [
     DatePipe,

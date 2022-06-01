@@ -22,11 +22,12 @@
 
 <div class="mat-elevation-z8 companyTable" *ngIf="allCompanyFlag == true">
   <mat-table [dataSource]="dataSource">
-    <div *ngFor="let column of displayColumns;">
+    <div *ngFor="let column of companyColumns;">
       <ng-container [matColumnDef]="column">
         <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
         <div *ngIf="column == 'No.'">
-          <mat-cell *matCellDef="let element; let i = index"> {{i + 1}} </mat-cell>
+          <mat-cell *matCellDef="let element; let i = index"> {{ (companyPageIndex * companyPageSize) + i + 1}}
+          </mat-cell>
         </div>
         <div *ngIf="column == 'Name'">
           <mat-cell *matCellDef="let element"> {{element.companyName}} </mat-cell>
@@ -45,16 +46,17 @@
         </div>
       </ng-container>
     </div>
-    <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+    <mat-header-row *matHeaderRowDef="companyColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: companyColumns;"></mat-row>
   </mat-table>
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator #paginator1 [pageSizeOptions]="[5, 10, 25, 100]" (page)="companyPageChangeEvent($event)">
+  </mat-paginator>
 </div>
 
 <div *ngIf="companySearchFlag == true" style="width: 100%">
 
   <div style="width: 60%; align-content: center;">
-    <mat-list role="list">
+    <mat-list role="list" class="list-align-center">
       <mat-list-item role="listitem">
         <div class="list-div-col1">Company Code</div>
         <div class="list-div-col2">{{companyData.companyCode}}</div>
@@ -63,6 +65,21 @@
       <mat-list-item role="listitem">
         <div class="list-div-col1">Company Name</div>
         <div class="list-div-col2">{{companyData.companyName}}</div>
+      </mat-list-item>
+      <mat-divider *ngIf="stockFlag"></mat-divider>
+      <mat-list-item role="listitem" *ngIf="stockFlag">
+        <div class="list-div-col1">Minimum</div>
+        <div class="list-div-col2">{{companyData.minStockPrice | currency: 'INR': 'symbol': '1.2-2'}}</div>
+      </mat-list-item>
+      <mat-divider *ngIf="stockFlag"></mat-divider>
+      <mat-list-item role="listitem" *ngIf="stockFlag">
+        <div class="list-div-col1">Maximum</div>
+        <div class="list-div-col2">{{companyData.maxStockPrice | currency: 'INR': 'symbol': '1.2-2'}}</div>
+      </mat-list-item>
+      <mat-divider *ngIf="stockFlag"></mat-divider>
+      <mat-list-item role="listitem" *ngIf="stockFlag">
+        <div class="list-div-col1">Average</div>
+        <div class="list-div-col2">{{companyData.avgStockPrice | currency: 'INR': 'symbol': '1.2-2'}}</div>
       </mat-list-item>
     </mat-list>
   </div>
@@ -73,8 +90,8 @@
         <td>From</td>
         <td>
           <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="fromDate" placeholder="dd/MM/yyyy" 
-            [(ngModel)]="fromDateValue" [max]="maxDate" (dateChange)="setMinDate()">
+            <input matInput [matDatepicker]="fromDate" placeholder="dd/MM/yyyy" [(ngModel)]="fromDateValue"
+              [max]="maxDate" (dateChange)="setMinDate()">
             <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
             <mat-datepicker #fromDate></mat-datepicker>
           </mat-form-field>
@@ -82,15 +99,43 @@
         <td>To</td>
         <td>
           <mat-form-field appearance="fill">
-            <input matInput [matDatepicker]="toDate" placeholder="dd/MM/yyyy" 
-            [(ngModel)]="toDateValue" [min]="minDate" (dateChange)="setMaxDate()">
+            <input matInput [matDatepicker]="toDate" placeholder="dd/MM/yyyy" [(ngModel)]="toDateValue" [min]="minDate"
+              (dateChange)="setMaxDate()">
             <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
             <mat-datepicker #toDate></mat-datepicker>
           </mat-form-field>
         </td>
-        <td><button mat-raised-button class="inverted-button" (click)="resetDates()">Reset</button></td>
+        <td><button mat-raised-button class="inverted-button" (click)="resetDates()">Clear</button></td>
         <td><button mat-raised-button (click)="filterStocks()">Search</button></td>
       </tr>
     </table>
   </div>
+  <br /> <br /> <br />
+  <div *ngIf="stockFlag" style="width: 95%; padding: 10px; margin-left: 20px;" class="mat-elevation-z8">
+    <mat-table [dataSource]="stockDataSource">
+      <div *ngFor="let column of stockColumns;">
+        <ng-container [matColumnDef]="column">
+          <mat-header-cell *matHeaderCellDef> {{column}} </mat-header-cell>
+          <div *ngIf="column == 'No.'">
+            <mat-cell *matCellDef="let element; let i = index"> {{ (stockPageIndex * stockPageSize) + i + 1}}
+            </mat-cell>
+          </div>
+          <div *ngIf="column == 'Stock Price'">
+            <mat-cell *matCellDef="let element"> {{element.price | currency: 'INR':'symbol'}} </mat-cell>
+          </div>
+          <div *ngIf="column == 'Date'">
+            <mat-cell *matCellDef="let element"> {{element.date | date}} </mat-cell>
+          </div>
+          <div *ngIf="column == 'Timestamp'">
+            <mat-cell *matCellDef="let element"> {{element.timeStamp | date: 'h:mm:ss a z'}} </mat-cell>
+          </div>
+        </ng-container>
+      </div>
+      <mat-header-row *matHeaderRowDef="stockColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: stockColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator2 [pageSizeOptions]="[5, 10, 25, 100]" (page)="stockPageChangeEvent($event)">
+    </mat-paginator>
+  </div>
+  <br /> <br /> <br />
 </div>
