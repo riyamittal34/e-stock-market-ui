@@ -27,3 +27,29 @@ button {
     background-color: #3949ab;
     color: white;
 }
+
+.inverted-button {
+    background-color: whitesmoke;
+    color: #3949ab;
+    border: 1px solid #3949ab;
+}
+
+mat-list {
+    width: 70%;
+    padding: 10px;
+    margin: 20px 50%;
+    border: 1px solid lightgrey;
+    border-radius: 2px;
+}
+
+.list-div-col1 {
+    float: left; 
+    width: 30%; 
+    text-align: center;
+}
+
+.list-div-col2 {
+    float: left; 
+    width: 70%; 
+    text-align: center;
+}

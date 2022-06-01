@@ -1,4 +1,6 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ToastrService } from 'ngx-toastr';
@@ -22,10 +24,15 @@ export class AppComponent implements OnInit {
   allCompanyFlag: boolean = true;
   companySearchFlag: boolean = false;
   companyData: Company;
+  fromDateValue: any;
+  toDateValue: any;
+  minDate: any;
+  maxDate: any;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private appService: AppService, private toastr: ToastrService) {
+  constructor(private appService: AppService, private toastr: ToastrService,
+    private datePipe: DatePipe) {
   }
   ngOnInit() {
     this.appService.getCompanyAccessToken().subscribe((data: any) => {
@@ -41,7 +48,7 @@ export class AppComponent implements OnInit {
   getCompanyByCompanyCode(companyCode: string) {
     this.appService.getCompanyByCompanyCode(this.companyToken, companyCode).subscribe((data: any) => {
       console.log(data);
-      if(data['message'] != null && data['message']['code'] == 'COMPANY_FOUND') {
+      if (data['message'] != null && data['message']['code'] == 'COMPANY_FOUND') {
         this.toastr.success(data['message']['description'], data['message']['code']);
         this.companies = [];
         this.companyData = data['data'];
@@ -51,7 +58,7 @@ export class AppComponent implements OnInit {
         this.toastr.error(data['message']['description'], data['message']['code']);
       }
     }, fail => {
-      let error = fail.error; 
+      let error = fail.error;
       this.toastr.error(error['message']['description'], error['message']['code']);
     })
   }
@@ -70,5 +77,30 @@ export class AppComponent implements OnInit {
         this.toastr.error(data['message']['description'], data['message']['code']);
       }
     })
+  }
+
+  filterStocks() {
+    console.log("fromDate: ", this.fromDateValue)
+    let fromDate = this.datePipe.transform(this.fromDateValue, 'dd-MM-yyyy')
+    console.log(fromDate)
+
+    console.log("toDate: ", this.toDateValue)
+    let toDate = this.datePipe.transform(this.toDateValue, 'dd-MM-yyyy')
+    console.log(toDate)
+  }
+
+  setMaxDate() {
+    this.maxDate = this.toDateValue;
+  }
+
+  setMinDate() {
+    this.minDate = this.fromDateValue;
+  }
+
+  resetDates() {
+    this.minDate = null;
+    this.maxDate = null;
+    this.fromDateValue = null;
+    this.toDateValue = null;
   }
 }

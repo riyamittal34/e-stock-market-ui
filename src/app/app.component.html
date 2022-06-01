@@ -51,15 +51,46 @@
   <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </div>
 
-<div *ngIf="companySearchFlag == true">
-  <table>
-    <tr>
-      <td>Company Code</td>
-      <td> {{companyData.companyCode}} </td>
-    </tr>
-    <tr>
-      <td>Company Name</td>
-      <td> {{companyData.companyName}} </td>
-    </tr>
-  </table>
+<div *ngIf="companySearchFlag == true" style="width: 100%">
+
+  <div style="width: 60%; align-content: center;">
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <div class="list-div-col1">Company Code</div>
+        <div class="list-div-col2">{{companyData.companyCode}}</div>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item role="listitem">
+        <div class="list-div-col1">Company Name</div>
+        <div class="list-div-col2">{{companyData.companyName}}</div>
+      </mat-list-item>
+    </mat-list>
+  </div>
+  <br /> <br /> <br />
+  <div style="width: 60%; margin: 0 20%;">
+    <table>
+      <tr>
+        <td>From</td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [matDatepicker]="fromDate" placeholder="dd/MM/yyyy" 
+            [(ngModel)]="fromDateValue" [max]="maxDate" (dateChange)="setMinDate()">
+            <mat-datepicker-toggle matSuffix [for]="fromDate"></mat-datepicker-toggle>
+            <mat-datepicker #fromDate></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td>To</td>
+        <td>
+          <mat-form-field appearance="fill">
+            <input matInput [matDatepicker]="toDate" placeholder="dd/MM/yyyy" 
+            [(ngModel)]="toDateValue" [min]="minDate" (dateChange)="setMaxDate()">
+            <mat-datepicker-toggle matSuffix [for]="toDate"></mat-datepicker-toggle>
+            <mat-datepicker #toDate></mat-datepicker>
+          </mat-form-field>
+        </td>
+        <td><button mat-raised-button class="inverted-button" (click)="resetDates()">Reset</button></td>
+        <td><button mat-raised-button (click)="filterStocks()">Search</button></td>
+      </tr>
+    </table>
+  </div>
 </div>
