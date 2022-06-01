@@ -83,6 +83,7 @@ export class AppComponent implements OnInit {
         }, 50);
         this.companySearchFlag = false;
         this.allCompanyFlag = true;
+        this.companyCodeFilter = "";
         this.resetDates();
       } else {
         this.toastr.error(data['message']['description'], data['message']['code']);

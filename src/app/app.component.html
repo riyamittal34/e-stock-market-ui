@@ -1,11 +1,13 @@
 <div class="container">
   <div class="row">
-    <div style="float: left;" class="logo">Logo</div>
     <div style="float: left;">
-      <button mat-raised-button>Add Company</button>
+      <img src="../assets/logo.png" />
+    </div>
+    <div style="float: left;">
+      <button mat-raised-button style="margin-top: 30px;">Add Company</button>
       <button mat-raised-button (click)="getAllCompany()">List All Company</button>
     </div>
-    <div style="float: right; position: absolute; right: 20px;">
+    <div style="float: right; position: absolute; right: 20px; top: 30px;">
       <mat-form-field class="example-form-field" appearance="fill">
         <mat-label>Company Code</mat-label>
         <input matInput type="text" [(ngModel)]="companyCodeFilter">

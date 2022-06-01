@@ -1,8 +1,14 @@
 .logo {
     width: 100px;
     height: 30px;
-    background-color: red;
     margin-right: 20px;
+}
+
+img {
+    width: 100px;
+    height: 100px;
+    padding: 0;
+    margin: 0;
 }
 
 button {
