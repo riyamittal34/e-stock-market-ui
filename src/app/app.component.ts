@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
 
   companyCodeFilter: string = "";
   companies: Company[] = [];
+  companyCodes: string[] = [];
   companyColumns = ['No.', 'Name', 'Code', 'Stock Exchange', 'Latest Stock Price', 'Website'];
   stockColumns = ['No.', 'Stock Price', 'Date', 'Timestamp'];
   allCompanyFlag: boolean = true;
@@ -74,9 +75,13 @@ export class AppComponent implements OnInit {
   }
 
   getAllCompany() {
+    this.companyCodes = [];
     this.appService.getAllCompanies(this.companyToken).subscribe((data: any) => {
       if (data['message'] != null && data['message']['code'] == 'DATA_FETCH_SUCCESS') {
         this.companies = data['data'];
+        this.companies.forEach(ele => {
+          this.companyCodes.push(ele.companyCode);
+        })
         this.dataSource = new MatTableDataSource(this.companies);
         setTimeout(() => {
           this.dataSource.paginator = this.paginator1;
