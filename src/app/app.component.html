@@ -21,9 +21,7 @@
     </div>
   </div>
 </div>
-
 <br /><br /><br />
-
 <div class="mat-elevation-z8 companyTable" *ngIf="allCompanyFlag == true">
   <mat-table [dataSource]="dataSource">
     <div *ngFor="let column of companyColumns;">
@@ -58,7 +56,6 @@
 </div>
 
 <div *ngIf="companySearchFlag == true" style="width: 100%">
-
   <div style="width: 60%; align-content: center;">
     <mat-list role="list" class="list-align-center">
       <mat-list-item role="listitem">
@@ -115,7 +112,7 @@
     </table>
   </div>
   <br /> <br /> <br />
-  <div *ngIf="stockFlag" style="width: 95%; padding: 10px; margin-left: 20px;" class="mat-elevation-z8">
+  <div *ngIf="stockFlag" style="width: 100%; padding: 10px; margin-left: 20px;" class="mat-elevation-z8">
     <mat-table [dataSource]="stockDataSource">
       <div *ngFor="let column of stockColumns;">
         <ng-container [matColumnDef]="column">
