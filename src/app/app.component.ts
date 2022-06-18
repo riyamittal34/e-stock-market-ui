@@ -103,6 +103,8 @@ export class AppComponent implements OnInit {
   }
 
   filterStocks() {
+    this.stockFlag = false;
+    this.stocks = [];
     let fromDate = this.datePipe.transform(this.fromDateValue, 'dd-MM-yyyy') + "";
     let toDate = this.datePipe.transform(this.toDateValue, 'dd-MM-yyyy') + "";
 
