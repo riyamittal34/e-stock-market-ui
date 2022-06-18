@@ -1,0 +1,15 @@
+.add-button {
+    background-color: #3949ab;
+    color: white;
+}
+
+.inverted-button {
+    background-color: whitesmoke;
+    color: #3949ab;
+    border: 1px solid #3949ab;
+}
+
+mat-form-field {
+    width: 45%;
+    margin: 5px;
+}

@@ -16,12 +16,14 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrModule } from 'ngx-toastr';
+import { AddCompanyModalComponent } from './add-company-modal/add-company-modal.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AddCompanyModalComponent
   ],
   imports: [
     BrowserModule,
@@ -46,6 +48,7 @@ import { AppComponent } from './app.component';
       preventDuplicates: true
     })
   ],
+  entryComponents: [ AddCompanyModalComponent ],
   providers: [
     DatePipe,
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }

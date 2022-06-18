@@ -13,4 +13,13 @@ export class Company {
     public avgStockPrice: number;
     public minStockPrice: number;
     public maxStockPrice: number;
+
+    constructor() {
+        this.companyCode = '',
+        this.companyName = '',
+        this.companyCeo = '',
+        this.companyTurnover = '',
+        this.companyWebsite = '',
+        this.stockExchange = ''
+    }
 }

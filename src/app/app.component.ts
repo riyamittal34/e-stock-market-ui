@@ -2,10 +2,13 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
+import { AddCompanyModalComponent } from './add-company-modal/add-company-modal.component';
 import { AppService } from './app.service';
 import { Company } from './models/company.model';
 import { Stock } from './models/stock.model';
+var $: any;
 
 @Component({
   selector: 'app-root',
@@ -43,7 +46,7 @@ export class AppComponent implements OnInit {
   @ViewChild('paginator2') paginator2: MatPaginator;
 
   constructor(private appService: AppService, private toastr: ToastrService,
-    private datePipe: DatePipe) {
+    private datePipe: DatePipe, private modalService: NgbModal) {
   }
   ngOnInit() {
     this.appService.getCompanyAccessToken().subscribe((data: any) => {
@@ -143,14 +146,23 @@ export class AppComponent implements OnInit {
   }
 
   stockPageChangeEvent($event: PageEvent) {
-    console.log("event: ", $event);
     this.stockPageIndex = $event.pageIndex;
     this.stockPageSize = $event.pageSize;
   }
 
   companyPageChangeEvent($event: PageEvent) {
-    console.log("event: ", $event);
     this.companyPageIndex = $event.pageIndex;
     this.companyPageSize = $event.pageSize;
+  }
+
+  addCompany() {
+    let modal = this.modalService.open(AddCompanyModalComponent, { size: 'lg', backdrop: false });
+    modal.componentInstance.companyToken = this.companyToken;
+
+    modal.result.then((data: any) => {
+      if(data == 'success') {
+        this.getAllCompany();
+      }
+    })
   }
 }

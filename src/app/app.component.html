@@ -4,7 +4,7 @@
       <img src="../assets/logo.png" />
     </div>
     <div style="float: left;">
-      <button mat-raised-button>Add Company</button>
+      <button mat-raised-button (click)="addCompany()">Add Company</button>
       <button mat-raised-button (click)="getAllCompany()">List All Company</button>
     </div>
     <div style="float: right; position: absolute; right: 20px;">
@@ -13,7 +13,6 @@
         <mat-select matNativeControl [(ngModel)]="companyCodeFilter">
           <mat-option *ngFor="let code of companyCodes" [value]="code">{{code}}</mat-option>
         </mat-select>
-
       </mat-form-field>
       <button matSuffix mat-icon-button aria-label="Search"
         (click)="getCompanyByCompanyCode(companyCodeFilter)">
