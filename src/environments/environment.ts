@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  companyBaseUrl: "http://localhost:8081/api/v1.0/market/company/",
-  stockBaseUrl: "http://localhost:8081/api/v1.0/market/stock/",
+  url: "https://y6kg6466q8.execute-api.us-west-2.amazonaws.com/dev/",
   username: 'riya',
   password: 'riya@123'
 };
